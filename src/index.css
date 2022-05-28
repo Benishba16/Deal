@@ -1,0 +1,40 @@
+@font-face {
+  font-family: 'Lexend-Regular';
+  src: local('Lexend-Regular'), url(./Assets/font/Lexend/Lexend-Regular.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Lexend-SemiBold';
+  src: local('Lexend-SemiBold'), url(./Assets/font/Lexend/Lexend-SemiBold.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Lexend-Bold';
+  src: local('Lexend-Bold'), url(./Assets/font/Lexend/Lexend-Bold.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Lexend-Medium';
+  src: local('Lexend-Medium'), url(./Assets/font/Lexend/Lexend-Medium.ttf) format('truetype');
+}
+
+.root {
+  font-family: "Lexend-Regular", "Segoe UI", "Roboto", "Oxygen",
+  "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+  sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: "Lexend-Regular", "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 13px !important;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
