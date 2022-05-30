@@ -6,6 +6,7 @@ import deals from "../../Assets/images/deals"
 import contact from "../../Assets/images/contact"
 import product from "../../Assets/images/product"
 import Settings from "../../Assets/images/settings"
+import Profile from "../../Assets/images/profile.jpeg"
 
 function SideNavbar() {
   const routeLink = [
@@ -40,10 +41,15 @@ function SideNavbar() {
       <div className='side-nav--logo'>
         <img className='company-logo' src={Logo} alt="company logo"/>
       </div>
+      <div className='sidenav-profile'>
       <div className='side-nav--link'>
         {routeLink.map(link => <NavLink className={`navbar-item ${link.exact && "is-active"}`} {...link}>
           <div className='side-nav--icon'>{link.image() ? link.image() : link.altImage}</div>
         </NavLink>)}
+      </div>
+      <div >
+        <img className='last-logo' src={Profile}/>
+      </div>
       </div>
     </section>
   )
