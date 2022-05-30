@@ -9,7 +9,6 @@ import SideNavbar from "./Components/SideNavbar/SideNavbar"
 import { BrowserRouter } from 'react-router-dom';
 import Header from './Components/Header/Header';
 import Search from './Components/Search/Search';
-import styled from "styled-components"
 
 const item = {
   id: v4(),
@@ -75,44 +74,23 @@ function App() {
     console.log("source", source)
     console.log("...state[source.droppableId]", state)
     if (!destination) {
-      
       return
     }
 
     if (destination.index === source.index && destination.droppableId === source.droppableId) {
-      
       return
     }
 
-    // Creating a copy of item before removing it from state
     const itemCopy = {...state[source.droppableId].items[source.index]}
-
-    console.log("source.droppableId",source.droppableId)
-    console.log("source.index",source.index)
-    console.log("itemCopy",itemCopy)
 
     setState(prev => {
       prev = {...prev}
       console.log("prev",prev)
-      // Remove from previous items array
       prev[source.droppableId].items.splice(source.index, 1)
-
-
-      // Adding to new items array location
       prev[destination.droppableId].items.splice(destination.index, 0, itemCopy)
-
       return prev
     })
   }
-
-
-  const Container = styled.div`
-  padding: 8px;
-  width: 320px;
-  height: 772px;
-  box-shadow: inset -1px 0px 0px rgba(0, 0, 0, 0.1);
-  background-color: ${props => (props.isDragginOver ? "#f4f5f5" : "#f4f5f5")}
-  `
 
   return (
     <div className="App">
@@ -121,16 +99,15 @@ function App() {
           <SideNavbar/>
         </div>
       </BrowserRouter>
-      <div className="app-wrapper--container">
-      <div><Search/></div>
-      <div><Header/></div>
+        <div className="app-wrapper--container">
+          <div><Search/></div>
+          <div><Header/></div>
       <DragDropContext  
         onDragEnd={handleDragEnd} >
         <section className='deals-section'>
         {_.map(state, (data, key) => {
           return(
             <div key={key}>
-              {/* <h3>{data.title}</h3> */}
               <div className='deals-column--header'>
                         <div className='d-flex flex-column'>
                           <span className='title'>{data.title}</span>
@@ -149,22 +126,8 @@ function App() {
                     <div
                       ref={provided.innerRef}
                       {...provided.droppableProps}
-                      // isDragginOver={snapshot.isDraggingOver}
                       className={`${snapshot.isDraggingOver ? "dragging" : "deals-column"}`}
-                      // className={`${snapshot.isDraggingOver ? "" : "deals-column"}`}
                     >
-                      {/* <div className='deals-column--header'>
-                        <div className='d-flex flex-column'>
-                          <span className='title'>{data.title}</span>
-                          <span className='d-flex deals-amount-title'>
-                            <span className='deal-head-amount'>{data.amount}</span>
-                            <span className='deals-count'>{data.deal}</span>
-                          </span>
-                        </div>
-                        <div>
-                          <span className='pr-1'>{Sort(15, 15)}</span>
-                        </div>
-                      </div> */}
                       {data.items.map((el, index) => {
                         return(
                           <Draggable key={el.id} index={index} draggableId={el.id} >
@@ -200,20 +163,6 @@ function App() {
                                   </div>
                                   </div>
                                   </div>
-                                  
-                                  {/* <div className='contact-checkbox'>
-                                  <div className='contacts'>
-                                    {contacts.map((contact) => (
-                                      <div className='contact-border'>
-                                        <img className='contact-pic' src={Profile} alt="profile"/>
-                                      </div>
-                                    ))}
-                                  </div>
-                                  
-                                  <div className='checkbox-input' >
-                                    <input type='checkbox' name="checkBox" className='largerCheckbox'/>
-                                  </div>
-                                  </div> */}
                                 </div>
                               )
                             }}

@@ -3,7 +3,6 @@ import Filter from "../../Assets/images/filter"
 import DropDown from "../../Assets/images/dropDown"
 import Add from "../../Assets/images/add"
 import "./styles.css"
-import GroupButton from '../GroupButton/GroupButton'
 import Kanban from "../../Assets/images/kanban"
 import List from "../../Assets/images/list"
 
