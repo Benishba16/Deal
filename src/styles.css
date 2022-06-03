@@ -45,15 +45,16 @@
 
 .deals-column {
   /* border: 2px solid green; */
+  position: relative;
   box-sizing: border-box;
-  padding-top: 8px;
+  /* padding-top: 8px; */
   width: 320px;
   height: 772px;
   background: #f4f5f5;
   box-shadow: inset -1px 0px 0px rgba(0, 0, 0, 0.1);
 }
 
-.deal-col{
+.deal-col {
   /* border: 2px solid red; */
   border-right: 1px solid #e0e0e0;
   height: 100vh;
@@ -69,7 +70,7 @@
   height: 70px;
   left: 60px;
   top: 128px;
-  background: #f4f5f5;
+  /* background: #f4f5f5; */
   box-shadow: inset 0px -1px 0px rgba(0, 0, 0, 0.1);
   padding: 16px;
 }
@@ -87,9 +88,11 @@
 
 .deal-card {
   /* border: 2px solid black; */
+  position: relative;
   margin-left: 8px;
   margin-right: 8px;
   margin-bottom: 8px;
+  margin-top: 8px;
   padding: 16px;
   gap: 12px;
   width: 300px;
@@ -177,7 +180,6 @@ input[type="checkbox"]:checked::after {
   z-index: -99;
 }
 
-
 .deal-card--content {
   /* border: 2px solid red; */
   display: flex;
@@ -235,4 +237,56 @@ input[type="checkbox"]:checked::after {
   /* border: 2px solid; */
   display: flex;
   gap: 8px;
+}
+
+.dealcard-placeholder {
+  display: none;
+  border: 2px solid red;
+
+  box-sizing: border-box;
+
+  /* position: absolute; */
+  width: 304px;
+  height: 638px;
+  /* left: 1028px; */
+  /* top: 230px; */
+
+  background: #ffffff;
+  opacity: 0.8;
+  border: 1px dashed #000000;
+  border-radius: 8px;
+
+  margin-left: 8px;
+  margin-top: 8px;
+  z-index: 3;
+}
+
+.draggable {
+  border: 2px solid green;
+}
+
+.zindex-hover {
+  /* border: 2px solid red; */
+  /* top: 0; */
+  /* left: 0; */
+  /* bottom: 0; */
+  /* right: 0; */
+  /* margin: 0; */
+  /* margin-top: 10px; */
+  /* border: 2px solid; */
+}
+
+
+.deals-column:hover .dealcard-placeholder{
+  display: block;
+}
+
+.placeholder {
+  margin-top: 80px;
+  margin-left: 8px;
+  position: absolute;
+  /* background-color: white; */
+  border-radius: 8px;
+  border: dashed 1px black;
+  /* background-color: white; */
 }

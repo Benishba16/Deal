@@ -9,6 +9,7 @@ import SideNavbar from "./Components/SideNavbar/SideNavbar"
 import { BrowserRouter } from 'react-router-dom';
 import Header from './Components/Header/Header';
 import Search from './Components/Search/Search';
+import {isEmpty} from "lodash"
 
 const item = {
   id: v4(),
@@ -35,6 +36,9 @@ const item3 = {
 
 function App() {
   const contacts = [1, 2]
+
+  const queryAttr = "data-rbd-drag-handle-draggable-id";
+  const [placeholderProps, setPlaceholderProps] = useState({});
 
   const [state, setState] = useState({
     "new": {
@@ -76,11 +80,10 @@ function App() {
     if (!destination) {
       return
     }
-
     if (destination.index === source.index && destination.droppableId === source.droppableId) {
       return
     }
-
+    
     const itemCopy = {...state[source.droppableId].items[source.index]}
 
     setState(prev => {
@@ -91,6 +94,85 @@ function App() {
       return prev
     })
   }
+
+  const handleDragStart = event => {
+    const draggedDOM = getDraggedDom(event.draggableId);
+
+    if (!draggedDOM) {
+      return;
+    }
+
+    const { clientHeight, clientWidth } = draggedDOM;
+    const sourceIndex = event.source.index;
+    var clientY =
+      parseFloat(window.getComputedStyle(draggedDOM.parentNode).paddingTop) +
+      [...draggedDOM.parentNode.children]
+        .slice(0, sourceIndex)
+        .reduce((total, curr) => {
+          const style = curr.currentStyle || window.getComputedStyle(curr);
+          const marginBottom = parseFloat(style.marginBottom);
+          return total + curr.clientHeight + marginBottom;
+        }, 0);
+
+    setPlaceholderProps({
+      clientHeight,
+      clientWidth,
+      clientY,
+      clientX: parseFloat(
+        window.getComputedStyle(draggedDOM.parentNode).paddingLeft
+      )
+    });
+  };
+
+  const handleDragUpdate = event => {
+    if (!event.destination) {
+      return;
+    }
+
+    const draggedDOM = getDraggedDom(event.draggableId);
+
+    if (!draggedDOM) {
+      return;
+    }
+
+    const { clientHeight, clientWidth } = draggedDOM;
+    const destinationIndex = event.destination.index;
+    const sourceIndex = event.source.index;
+
+    const childrenArray = [...draggedDOM.parentNode.children];
+    const movedItem = childrenArray[sourceIndex];
+    childrenArray.splice(sourceIndex, 1);
+
+    const updatedArray = [
+      ...childrenArray.slice(0, destinationIndex),
+      movedItem,
+      ...childrenArray.slice(destinationIndex + 1)
+    ];
+
+    var clientY =
+      parseFloat(window.getComputedStyle(draggedDOM.parentNode).paddingTop) +
+      updatedArray.slice(0, destinationIndex).reduce((total, curr) => {
+        const style = curr.currentStyle || window.getComputedStyle(curr);
+        const marginBottom = parseFloat(style.marginBottom);
+        return total + curr.clientHeight + marginBottom;
+      }, 0);
+
+    setPlaceholderProps({
+      clientHeight,
+      clientWidth,
+      clientY,
+      clientX: parseFloat(
+        window.getComputedStyle(draggedDOM.parentNode).paddingLeft
+      )
+    });
+  };
+
+  const getDraggedDom = draggableId => {
+    const domQuery = `[${queryAttr}='${draggableId}']`;
+    const draggedDOM = document.querySelector(domQuery);
+
+    return draggedDOM;
+  };
 
   return (
     <div className="App">
@@ -103,12 +185,24 @@ function App() {
           <div><Search/></div>
           <div><Header/></div>
       <DragDropContext  
-        onDragEnd={handleDragEnd} >
+        onDragEnd={handleDragEnd} 
+        onDragStart={handleDragStart}
+        onDragUpdate={handleDragUpdate}
+        >
         <section className='deals-section'>
         {_.map(state, (data, key) => {
           return(
             <div key={key}>
-              <div className='deals-column--header'>
+              <Droppable droppableId={key}>
+                {(provided, snapshot) => {
+                  return(
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                      className={`deals-column `}
+                    >
+                      <div className='zindex-hover'>
+                      <div className='deals-column--header'>
                         <div className='d-flex flex-column'>
                           <span className='title'>{data.title}</span>
                           <span className='d-flex deals-amount-title'>
@@ -120,23 +214,19 @@ function App() {
                           <span className='pr-1'>{Sort(15, 15)}</span>
                         </div>
                       </div>
-              <Droppable droppableId={key}>
-                {(provided, snapshot) => {
-                  return(
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.droppableProps}
-                      className={`${snapshot.isDraggingOver ? "dragging" : "deals-column"}`}
-                    >
+
+                      <div 
+                      // className={`dealcard-placeholder `}
+                      >
                       {data.items.map((el, index) => {
                         return(
-                          <Draggable key={el.id} index={index} draggableId={el.id} >
+                          <Draggable key={el.id} index={index} draggableId={el.id}  className="draggable">
                             {(provided, snapshot) => {
                               console.log("provided",provided)
                               console.log("snapshot",snapshot)
                               return(
                                 <div
-                                  className="deal-card"
+                                  className={`deal-card ${snapshot.isUsingPlaceholder && "drop-animate"}`}
                                   ref={provided.innerRef}
                                   {...provided.draggableProps}
                                   {...provided.dragHandleProps}
@@ -169,7 +259,21 @@ function App() {
                           </Draggable>
                         )
                       })}
+                      </div>
                       {provided.placeholder}
+                      {console.log("provided.placeholder",provided.placeholder)}
+                      {!isEmpty(placeholderProps) && snapshot.isDraggingOver && (
+                        <div
+                          className="placeholder"
+                          style={{
+                          top: placeholderProps.clientY,
+                          left: placeholderProps.clientX,
+                          height: placeholderProps.clientHeight,
+                          width: placeholderProps.clientWidth
+                        }}
+                        />
+                        )}
+                    </div>
                     </div>
                   )
                 }}
